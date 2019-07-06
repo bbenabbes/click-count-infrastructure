@@ -1,0 +1,45 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  # Base VM OS configuration.
+  config.vm.box = "geerlingguy/centos7"
+  config.ssh.insert_key = false
+  config.vm.synced_folder '.', '/vagrant', disabled: true
+
+  # General VirtualBox VM configuration.
+  config.vm.provider :virtualbox do |v|
+    v.memory = 1024
+    v.cpus = 1
+    v.linked_clone = true
+    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    v.customize ["modifyvm", :id, "--ioapic", "on"]
+  end
+
+  # Application.
+  config.vm.define "app" do |app|
+    app.vm.hostname = "staging.app"
+    app.vm.network :private_network, ip: "192.168.2.2"
+
+    app.vm.provision "shell",
+      inline: "sudo yum update -y"
+  end
+
+  # Redis.
+  config.vm.define "db" do |db|
+    db.vm.hostname = "staging.db"
+    db.vm.network :private_network, ip: "192.168.2.3"
+
+    # Run Ansible provisioner once for all VMs at the end.
+    db.vm.provision "ansible" do |ansible|
+      ansible.playbook = "configure.yml"
+      ansible.inventory_path = "inventory"
+      ansible.limit = "all"
+      ansible.extra_vars = {
+        ansible_ssh_user: 'vagrant',
+        ansible_ssh_private_key_file: "~/.vagrant.d/insecure_private_key"
+      }
+    end
+  end
+end
+
