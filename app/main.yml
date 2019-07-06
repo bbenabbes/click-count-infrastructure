@@ -1,12 +1,13 @@
 ---
 - hosts: app
+  become: yes
   roles:
-    - role: geerlingguy.java
+    - geerlingguy.java
       when: "ansible_os_family == 'RedHat'"
       java_packages:
         - java-1.8.0-openjdk
 
-    - role: zaxos.tomcat-ansible-role
+    - zaxos.tomcat-ansible-role
       tomcat_version: 8.5.23
       tomcat_permissions_production: True
       tomcat_users:

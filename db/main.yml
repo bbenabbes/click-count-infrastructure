@@ -1,5 +1,6 @@
 ---
 - hosts: db
+  become: yes
   roles:
     - geerlingguy.repo-epel
     - geerlingguy.redis
