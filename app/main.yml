@@ -1,0 +1,19 @@
+---
+- hosts: app
+  roles:
+    - role: geerlingguy.java
+      when: "ansible_os_family == 'RedHat'"
+      java_packages:
+        - java-1.8.0-openjdk
+
+    - role: zaxos.tomcat-ansible-role
+      tomcat_version: 8.5.23
+      tomcat_permissions_production: True
+      tomcat_users:
+        - username: "tomcat"
+          password: "t3mpp@ssw0rd"
+          roles: "tomcat,admin,manager,manager-gui"
+        - username: "exampleuser"
+          password: "us3rp@ssw0rd"
+          roles: "tomcat"
+
