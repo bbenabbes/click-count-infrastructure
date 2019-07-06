@@ -1,0 +1,6 @@
+---
+- hosts: db
+  roles:
+    - geerlingguy.repo-epel
+    - geerlingguy.redis
+
