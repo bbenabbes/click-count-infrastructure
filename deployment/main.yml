@@ -1,0 +1,29 @@
+---
+- hosts: app
+  become: yes
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Download application release
+      get_url:
+        url: "http://github.com/bbenabbes/click-count/releases/download/{{ app_version }}/clickCount.war"
+        dest: "{{ app_directory }}"
+      register: app_updated
+
+    - name: Set correct permissions
+      file: 
+        path: "{{ app_directory }}/clickCount.war"
+        owner: tomcat
+        group: tomcat
+      when: app_updated.changed
+      register: app_deployed
+ 
+    - name: Restart tomcat
+      systemd:
+        name: tomcat
+        state: restarted
+        daemon_reload: yes
+      when: app_deployed.changed
+
