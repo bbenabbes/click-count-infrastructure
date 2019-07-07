@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
 
   # Application.
   config.vm.define "app" do |app|
-    app.vm.hostname = "staging.app"
+    app.vm.hostname = "staging.clickcount"
     app.vm.network :private_network, ip: "192.168.2.2"
 
     app.vm.provision "shell",
