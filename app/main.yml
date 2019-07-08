@@ -3,14 +3,16 @@
   become: yes
   roles:
     - role: geerlingguy.java
-      java_packages:
-        - java-1.8.0-openjdk
+      vars:
+        java_packages:
+          - java-1.8.0-openjdk
 
     - role: zaxos.tomcat-ansible-role
-      tomcat_version: 8.5.23
-      tomcat_permissions_production: True
-      tomcat_users:
-        - username: "tomcat"
-          password: "tomcat"
-          roles: "tomcat,admin,manager,manager-gui"
+      vars:
+        tomcat_version: 8.5.23
+        tomcat_permissions_production: True
+        tomcat_users:
+          - username: "tomcat"
+            password: "tomcat"
+            roles: "tomcat,admin,manager,manager-gui"
 

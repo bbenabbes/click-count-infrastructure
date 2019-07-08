@@ -2,7 +2,8 @@
 - hosts: db
   become: yes
   roles:
-    - geerlingguy.repo-epel
-    - geerlingguy.redis
-      redis_bind_interface: 0.0.0.0
+    - role: geerlingguy.repo-epel
+    - role: geerlingguy.redis
+      vars:
+        redis_bind_interface: 0.0.0.0
 
