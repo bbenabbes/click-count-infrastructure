@@ -1,4 +1,2 @@
 ---
 app_directory: "/opt/apache-tomcat-8.5.23/webapps"
-app_version: "v0.1"
-
