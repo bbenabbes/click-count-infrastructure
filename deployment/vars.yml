@@ -1,2 +1,3 @@
 ---
 app_directory: "/opt/apache-tomcat-8.5.23/webapps"
+artifact: "target/clickCount.war"

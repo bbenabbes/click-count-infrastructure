@@ -8,11 +8,11 @@
   tasks:
     - name: Copy application artifact with owner and permissions
       copy:
-        src: "{{ app_directory }}"
-        dest: "target/clickCount.war"
+        src: "{{ artifact }}"
+        dest: "{{ app_directory }}"
         owner: tomcat
         group: tomcat
-       register: app_updated
+      register: app_updated
 
     - name: Restart tomcat
       systemd:
