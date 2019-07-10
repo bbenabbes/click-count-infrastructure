@@ -1,12 +1,22 @@
-language: python
-python:
-  - "3.6"
-cache: pip
-install:
-  - pip install -q ansible==2.8.1
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - sudo docker pull centos:7
+  - sudo docker build --rm=true --tag=centos:ansible .
+
 script:
-  - ansible-galaxy install -r requirements.yml
-  - ansible-playbook app/main.yml --syntax-check
-  - ansible-playbook db/main.yml --syntax-check
-  - ansible-playbook deployment/main.yml --syntax-check
-  - ansible-playbook configure.yml --syntax-check
+  - sudo docker run --detach --privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro centos:ansible /usr/lib/systemd/systemd > /tmp/container_id
+
+  - sudo docker exec "$(cat /tmp/container_id)" ansible-playbook /etc/ansible/app/main.yml --syntax-check
+  - sudo docker exec "$(cat /tmp/container_id)" ansible-playbook /etc/ansible/db/main.yml --syntax-check
+  - sudo docker exec "$(cat /tmp/container_id)" ansible-playbook /etc/ansible/deployment/main.yml --syntax-check
+  - sudo docker exec "$(cat /tmp/container_id)" ansible-playbook /etc/ansible/configure.yml --syntax-check
+
+  # Run the playbook with ansible-playbook
+  - sudo docker exec "$(cat /tmp/container_id)" ansible-playbook -i /etc/ansible/tests/inventory /etc/ansible/configure.yml -e artifact="/etc/ansible/tests/test.war" --connection=local
+
+  # Checkthat the playbook is idempotent
+  - sudo docker exec "$(cat /tmp/container_id)" ansible-playbook -i /etc/ansible/tests/inventory /etc/ansible/deployment/main.yml -e artifact="/etc/ansible/tests/test.war" --connection=local | grep -q 'changed=0.*failed=0' && exit 0 || exit 1
