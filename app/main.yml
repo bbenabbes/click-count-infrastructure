@@ -7,7 +7,7 @@
         java_packages:
           - java-1.8.0-openjdk
 
-    - role: zaxos.tomcat-ansible-role
+    - role: tomcat-ansible-role
       vars:
         tomcat_version: 8.5.23
         tomcat_permissions_production: True

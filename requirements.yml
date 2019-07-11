@@ -1,6 +1,5 @@
 ---
 - src: geerlingguy.repo-epel
 - src: geerlingguy.java
-- src: zaxos.tomcat-ansible-role
+- src: https://github.com/bbenabbes/tomcat-ansible-role
 - src: geerlingguy.redis
-
