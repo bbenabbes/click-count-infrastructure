@@ -3,17 +3,17 @@
 [![Build Status](https://travis-ci.org/bbenabbes/click-count-infrastructure.svg?branch=master)](https://travis-ci.org/bbenabbes/click-count-infrastructure)
 
 This project allows you to configure and deploy, via Ansible, the click count application 
-infrastructure (illustrated below) on servers provisioned automatically via Vagrant and VirtualBox:
+staging and production infrastructures (illustrated below) on servers provisioned automatically via Vagrant and VirtualBox:
 
-                       ---------------------------------
-                      |  clickcount (Apache Tomcat)     |
-                      |  192.168.2.3                    |
-                       ---------------------------------
-                                      |
-                       ---------------------------------
-                      |  db (Redis)                     |
-                      |  192.168.2.4                    |
-                       ---------------------------------
+         -------------------------------------          ---------------------------------
+        |  staging.clickcount (Apache Tomcat) |        |  clickcount (Apache Tomcat)     |
+        |  192.168.2.2                        |        |  192.168.2.4                    |
+         -------------------------------------          ---------------------------------
+                          |                                             |
+         -------------------------------------          ---------------------------------
+        |  staging.db (Redis)                 |        |  db (Redis)                     |
+        |  192.168.2.3                        |        |  192.168.2.5                    |
+         -------------------------------------          ---------------------------------
 
 *IP addresses and hostnames in this diagram are modeled after VirtualBox/Vagrant-based VMs.* 
 
@@ -41,6 +41,6 @@ To build the VMs and configure them using Ansible, follow these steps:
   1. Run `vagrant up`.
   2. Run `ansible-playbook configure.yml -e artifact="/path/to/war/file/to/be/deployed`.
 
-After everything is booted, configured and deployed, visit http://clickcount/ (if you 
-configured the domain in your hosts file with the line `192.168.2.2  clickcount`) 
+After everything is booted, configured and deployed, visit http://staging.clickcount/ (if you 
+configured the domain in your hosts file with the line `192.168.2.2  staging.clickcount`) 
 in a browser.
